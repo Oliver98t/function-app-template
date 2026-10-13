@@ -1,0 +1,2 @@
+create package for storing pulumi components [*]
+create function-app-template repo with provisioning method []

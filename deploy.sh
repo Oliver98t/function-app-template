@@ -1,6 +1,9 @@
+cd infrastructure
 pulumi up -y
-cd src
-func azure functionapp publish "$(pulumi stack output function_app_name)" \
+function_app_name=$(pulumi stack output function_app_name)
+cd ..
+cd source
+func azure functionapp publish "$function_app_name" \
   --python \
   --build remote
 cd ..
