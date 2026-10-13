@@ -6,4 +6,4 @@ cd source
 func azure functionapp publish "$function_app_name" \
   --python \
   --build remote
-cd ..
+cd .. 
