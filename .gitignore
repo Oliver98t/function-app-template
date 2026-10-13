@@ -1,0 +1,29 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Azure Functions local and build artifacts
+local.settings.json
+.python_packages/
+.azurefunctions/
+
+# Local environment and editor files
+.env
+.env.*
+.DS_Store
+.vscode/
