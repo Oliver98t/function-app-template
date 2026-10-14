@@ -30,62 +30,62 @@ jobs:
       - name: Run tests
         run: uv run pytest -q
 
-  deploy:
-    if: github.event_name != 'pull_request'
-    needs: test
-    runs-on: ubuntu-latest
-    environment: dev
-    concurrency:
-      group: pulumi-dev
-      cancel-in-progress: false
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+#   deploy:
+#     if: github.event_name != 'pull_request'
+#     needs: test
+#     runs-on: ubuntu-latest
+#     environment: dev
+#     concurrency:
+#       group: pulumi-dev
+#       cancel-in-progress: false
+#     permissions:
+#       contents: read
+#       id-token: write
+#     steps:
+#       - name: Check out repository
+#         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.12"
 
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: true
+#       - name: Set up uv
+#         uses: astral-sh/setup-uv@v6
+#         with:
+#           enable-cache: true
 
-      - name: Install dependencies
-        run: uv sync --locked
+#       - name: Install dependencies
+#         run: uv sync --locked
 
-      - name: Sign in to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       - name: Sign in to Azure
+#         uses: azure/login@v2
+#         with:
+#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy infrastructure
-        uses: pulumi/actions@v6
-        with:
-          command: up
-          stack-name: dev
-          work-dir: infrastructure
-          refresh: true
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+#       - name: Deploy infrastructure
+#         uses: pulumi/actions@v6
+#         with:
+#           command: up
+#           stack-name: dev
+#           work-dir: infrastructure
+#           refresh: true
+#         env:
+#           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
-      - name: Read Function App name
-        id: pulumi-outputs
-        working-directory: infrastructure
-        run: echo "function-app-name=$(pulumi stack output function_app_name --stack dev)" >> "$GITHUB_OUTPUT"
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+#       - name: Read Function App name
+#         id: pulumi-outputs
+#         working-directory: infrastructure
+#         run: echo "function-app-name=$(pulumi stack output function_app_name --stack dev)" >> "$GITHUB_OUTPUT"
+#         env:
+#           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
-      - name: Deploy Function App code
-        uses: Azure/functions-action@v1
-        with:
-          app-name: ${{ steps.pulumi-outputs.outputs.function-app-name }}
-          package: source
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+#       - name: Deploy Function App code
+#         uses: Azure/functions-action@v1
+#         with:
+#           app-name: ${{ steps.pulumi-outputs.outputs.function-app-name }}
+#           package: source
+#           scm-do-build-during-deployment: true
+#           enable-oryx-build: true

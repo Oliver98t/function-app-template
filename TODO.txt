@@ -1,3 +1,5 @@
 create package for storing pulumi components [*]
 create function-app-template repo with provisioning method []
     create setup script to install packages etc
+create generic deployment pipeline []
+    NOTE - will need to use pre commit hooks as a palce holder - dont have permissions to create a service principal
