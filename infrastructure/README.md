@@ -70,6 +70,26 @@
  pulumi stack output storage_account_name
  ```
 
+ ## CI/CD
+
+ The GitHub Actions workflow in `.github/workflows/deploy.yml` runs unit tests on
+ pull requests and pushes. After tests pass on `main`, it updates the Pulumi
+ `dev` stack and publishes the code in `source` to the resulting Function App.
+
+ Create a GitHub environment named `dev` and configure these secrets on that
+ environment or on the repository:
+
+ - `AZURE_CLIENT_ID` - client ID of an Entra application configured for GitHub OIDC
+ - `AZURE_TENANT_ID` - Entra tenant ID
+ - `AZURE_SUBSCRIPTION_ID` - target Azure subscription ID
+ - `PULUMI_ACCESS_TOKEN` - token used to access the Pulumi backend
+
+ The Azure federated credential subject for the `dev` environment is:
+
+ ```text
+ repo:Oliver98t/function-app-template:environment:dev
+ ```
+
  ## When to Use This Template
 
  - You want a quick Azure infrastructure starter with Pulumi and Python
