@@ -11,6 +11,7 @@ cd ..
 uv sync --refresh --upgrade
 # deploy function app code
 cd source
+echo "Function app deployment"
 sleep 15
 func azure functionapp publish "$function_app_name" \
   --python \
